@@ -1,5 +1,10 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import "./index.css";
+
+import { InputTodo } from "./components/inputTodo";
+import { IncompleteTodos } from "./components/IncompleteTodos";
+import { CompleteTodos } from "./components/CompleteTodos";
+
 
 export const App = () => {
   console.log("start");
@@ -47,37 +52,22 @@ export const App = () => {
 
   return (
     <>
-      <div className="input-area">
-        <input placeholder="Input TODO" value={todoText} onChange={onChangeTodoText} />
-        <button onClick={onClickAddTodo}>Add</button>
-      </div>
-      <div className="incomplete-area">
-        <p className="title">Incomplete List</p>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-              <div key={todo} className="list-row">
-              <li>{todo}</li>
-              <button onClick={() => onClickComplete(index)}>Complete</button>
-              <button onClick={() => onClickDelete(index)}>Delete</button>
-            </div>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="complete-area">
-        <p className="title">Complete List</p>
-        <ul>
-          {completeTodos.map((todo, index) => {
-            return (
-              <div key={todo} className="list-row">
-              <li>{todo}</li>
-              <button onClick={() => onClickBack(index)}>Back</button>
-            </div>  
-            )
-          })}
-        </ul>
-      </div>
+      <InputTodo
+        todoText={todoText}
+        onChange={onChangeTodoText}
+        onClick={onClickAddTodo}
+        disabled={incompleteTodos.length >= 5}
+      />
+      {incompleteTodos.length >= 5 && <p style={{color: 'red'}}>Todoは5個までだよ〜</p>}
+      <IncompleteTodos
+        incompleteTodos={incompleteTodos}
+        onClickComplete={onClickComplete}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodos
+        completeTodos={completeTodos}
+        onClick={onClickBack}
+      />
     </>
   );
 }
